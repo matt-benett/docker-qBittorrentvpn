@@ -77,7 +77,7 @@ if [[ "${DEBUG}" == "true" ]]; then
 fi
 
 # convert netmask into cidr format
-docker_network_cidr="/32"
+docker_network_cidr=$(ipcalc "${docker_ip}" "${docker_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 echo "[info] Docker network defined as ${docker_network_cidr}" | ts '%Y-%m-%d %H:%M:%.S'
 
 # input iptable rules
@@ -93,7 +93,7 @@ ip6tables -P INPUT DROP 1>&- 2>&-
 iptables -A INPUT -i "${VPN_DEVICE_TYPE}" -j ACCEPT
 
 # accept input to/from LANs (172.x range is internal dhcp)
-iptables -A INPUT -s "${docker_ip"/32 -d /32 -j ACCEPT
+iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
 
 # accept input to vpn gateway
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
