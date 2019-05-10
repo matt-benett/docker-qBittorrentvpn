@@ -59,7 +59,7 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 fi
 
 # identify docker bridge interface name (probably eth0)
- docker_interface=$(netstat -ie | grep -vE "lo|tun|tap" | sed -n '1!p' | grep -P -o -m 1 '^[\w]+')
+ docker_interface=eth0
 if [[ "${DEBUG}" == "true" ]]; then
 	echo "[debug] Docker interface defined as ${docker_interface}"
 fi
