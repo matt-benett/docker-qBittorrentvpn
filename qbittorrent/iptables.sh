@@ -77,8 +77,8 @@ if [[ "${DEBUG}" == "true" ]]; then
 fi
 
 # convert netmask into cidr format
-docker_network_cidr=$(ipcalc "${docker_ip}" "${docker_mask}" | grep -P -o -m 1 "(?<=Network:)\s+[^\s]+" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-echo "[info] Docker network defined as ${docker_network_cidr}" | ts '%Y-%m-%d %H:%M:%.S'
+docker_network_cidr="${docker_ip}/32"
+echo "[info] Docker network defined as ${docker_ip}" | ts '%Y-%m-%d %H:%M:%.S'
 
 # input iptable rules
 ###
